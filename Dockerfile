@@ -57,6 +57,7 @@ RUN set -ex \
         apt-transport-https \
     && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-stretch-prod stretch main" > /etc/apt/sources.list.d/microsoft.list' \
+    && apt-get update -yqq \
     && apt-get install -yqq --no-install-recommends powershell \
     && sed -i 's/^# en_US.UTF-8 UTF-8$/en_US.UTF-8 UTF-8/g' /etc/locale.gen \
     && locale-gen \
