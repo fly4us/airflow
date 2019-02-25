@@ -15,7 +15,7 @@ ENV TERM linux
 ARG AIRFLOW_VERSION=1.10.2
 ARG AIRFLOW_HOME=/usr/local/airflow
 ARG AIRFLOW_DEPS="dask,password,async,samba"
-ARG PYTHON_DEPS="cx-Oracle,ibm_db,numpy,scipy,paramiko,ujson"
+ARG PYTHON_DEPS="cx-Oracle ibm_db numpy scipy paramiko ujson"
 ENV AIRFLOW_GPL_UNIDECODE yes
 
 # Define en_US.
