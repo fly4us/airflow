@@ -3,8 +3,11 @@ FROM puckel/docker-airflow:1.10.2
 
 ARG AIRFLOW_HOME=/usr/local/airflow
 
+USER root
+
 RUN mkdir -p ${AIRFLOW_HOME}/opt/instantclient; \
   mkdir -p ${AIRFLOW_HOME}/opt/clidriver; \
+  chown -R airflow: ${AIRFLOW_HOME}; \
   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${AIRFLOW_HOME}/opt/instantclient; \
   export IBM_DB_HOME=${AIRFLOW_HOME}/opt/clidriver
   
@@ -16,3 +19,5 @@ RUN set -ex; \
   apt-get update; \
   apt-get install -y powershell; \  
   rm -rf /var/lib/apt/lists/*
+
+USER airflow
