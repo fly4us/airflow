@@ -8,7 +8,7 @@ RUN mkdir -p ${AIRFLOW_HOME}/opt/instantclient; \
   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${AIRFLOW_HOME}/opt/instantclient; \
   export IBM_DB_HOME=${AIRFLOW_HOME}/opt/clidriver
   
-RUN set -eux; \
+RUN set -ex; \
   apt-get update; \
   apt-get install -y --no-install-recommends curl gnupg apt-transport-https; \
   curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -; \
