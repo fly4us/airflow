@@ -86,6 +86,7 @@ RUN mkdir -p ${AIRFLOW_HOME}/opt/instantclient; \
 
 COPY script/entrypoint.sh /entrypoint.sh
 COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
+RUN chmod +x /entrypoint.sh
 
 RUN chown -R airflow: ${AIRFLOW_HOME}
 
