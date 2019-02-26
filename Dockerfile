@@ -25,12 +25,6 @@ ENV LC_ALL en_US.UTF-8
 ENV LC_CTYPE en_US.UTF-8
 ENV LC_MESSAGES en_US.UTF-8
 
-RUN mkdir -p ${AIRFLOW_HOME}/opt/instantclient; \
-  mkdir -p ${AIRFLOW_HOME}/opt/clidriver; \
-  chown -R airflow: ${AIRFLOW_HOME}; \
-  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${AIRFLOW_HOME}/opt/instantclient; \
-  export IBM_DB_HOME=${AIRFLOW_HOME}/opt/clidriver
-
 RUN set -ex \
     && buildDeps=' \
         freetds-dev \
@@ -71,6 +65,7 @@ RUN set -ex \
     && pip install apache-airflow[crypto,celery,postgres,hive,jdbc,mysql,ssh${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION} \
     && pip install 'redis>=2.10.5,<3' \
     && if [ -n "${PYTHON_DEPS}" ]; then pip install ${PYTHON_DEPS}; fi \
+    && rm  -rf /usr/local/lib/python3.6/site-packages/clidriver \
     && apt-get purge --auto-remove -yqq $buildDeps \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
@@ -81,6 +76,12 @@ RUN set -ex \
         /usr/share/man \
         /usr/share/doc \
         /usr/share/doc-base
+        
+RUN mkdir -p ${AIRFLOW_HOME}/opt/instantclient; \
+  mkdir -p ${AIRFLOW_HOME}/opt/clidriver; \
+  chown -R airflow: ${AIRFLOW_HOME}; \
+  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${AIRFLOW_HOME}/opt/instantclient; \
+  export IBM_DB_HOME=${AIRFLOW_HOME}/opt/clidriver        
 
 COPY script/entrypoint.sh /entrypoint.sh
 COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
