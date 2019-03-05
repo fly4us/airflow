@@ -14,7 +14,7 @@ ENV TERM linux
 # Airflow
 ARG AIRFLOW_VERSION=1.10.2
 ARG AIRFLOW_HOME=/usr/local/airflow
-ARG AIRFLOW_DEPS="dask,password,async,samba"
+ARG AIRFLOW_DEPS="dask,password,async,samba,redis"
 ARG PYTHON_DEPS="cx-Oracle ibm_db numpy scipy paramiko ujson"
 ENV AIRFLOW_GPL_UNIDECODE yes
 
@@ -48,11 +48,12 @@ RUN set -ex \
         netcat \
         locales \
         gnupg \
+        gawk \
         apt-transport-https \
     && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-stretch-prod stretch main" > /etc/apt/sources.list.d/microsoft.list' \
     && apt-get update -yqq \
-    && apt-get install -yqq --no-install-recommends powershell gawk \
+    && apt-get install -yqq --no-install-recommends powershell \
     && sed -i 's/^# en_US.UTF-8 UTF-8$/en_US.UTF-8 UTF-8/g' /etc/locale.gen \
     && locale-gen \
     && update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 \
@@ -63,7 +64,7 @@ RUN set -ex \
     && pip install ndg-httpsclient \
     && pip install pyasn1 \
     && pip install apache-airflow[crypto,celery,postgres,hive,jdbc,mysql,ssh${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION} \
-    && pip install 'redis>=2.10.5,<3' \
+    && pip install redis \
     && if [ -n "${PYTHON_DEPS}" ]; then pip install ${PYTHON_DEPS}; fi \
     && rm -rf /usr/local/lib/python3.6/site-packages/clidriver \
     && rm -rf ~/.cache/pip \
